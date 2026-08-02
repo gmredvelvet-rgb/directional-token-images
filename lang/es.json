@@ -1,0 +1,253 @@
+{
+  "DTI": {
+    "TAB": {
+      "label": "Imágenes Direccionales"
+    },
+    "APP": {
+      "title": "Imágenes Direccionales de Token",
+      "noTarget": "Ningún token seleccionado",
+      "appliesToCount": "Se aplicará a {count} tokens",
+      "prototype": "token prototipo",
+      "prototypeScope": "Guardado en el actor: todo token nuevo lo hereda",
+      "propagate": "Actualizar también los tokens ya colocados en las escenas",
+      "propagateHint": "Hay {count} token(s) de este actor repartidos por tus escenas que se pondrán al día.",
+      "propagateNone": "Todavía no hay ningún token de este actor colocado en ninguna escena."
+    },
+    "SECTIONS": {
+      "images": "1. Seleccionar Imágenes",
+      "directionalViews": "Vistas Direccionales",
+      "transform": "2. Ajustes de Posición y Escala",
+      "preview": "3. Vista Previa"
+    },
+    "FIELDS": {
+      "enabled": {
+        "label": "Activar Imágenes Direccionales",
+        "hint": "Cambia automáticamente el arte del token según la dirección en la que se mueve."
+      },
+      "mode": {
+        "label": "Conjunto de imágenes",
+        "hint": "Cuántas variantes usa este token. Las imágenes de otros conjuntos se conservan, así que cambiar de modo no borra nada."
+      },
+      "mirrorHorizontal": {
+        "label": "Espejar izquierda y derecha",
+        "hint": "Reutiliza el dibujo de un lado para el otro, volteado horizontalmente: rellena Este y el Oeste se genera solo (y al revés). Las diagonales se emparejan igual. Solo se cambia el signo de la escala horizontal del token, nunca su magnitud ni su rotación."
+      },
+      "loadMethod": {
+        "label": "Método de carga",
+        "picker": "File Picker",
+        "url": "URL"
+      },
+      "base": {
+        "label": "Base (opcional)",
+        "placeholder": "bases/piedra_circular.png"
+      }
+    },
+    "DIRECTIONS": {
+      "default": {
+        "label": "Predeterminada / Reserva",
+        "hint": "Se usa cuando la imagen propia de la dirección está vacía."
+      },
+      "n": {
+        "label": "Arriba (Norte)",
+        "hint": "Se muestra cuando el token se aleja del espectador."
+      },
+      "ne": {
+        "label": "Arriba-Derecha (Noreste)",
+        "hint": "Si está vacía usa Norte o Este."
+      },
+      "e": {
+        "label": "Derecha (Este)",
+        "hint": "Se muestra cuando el token se mueve hacia la derecha."
+      },
+      "se": {
+        "label": "Abajo-Derecha (Sureste)",
+        "hint": "Si está vacía usa Sur o Este."
+      },
+      "s": {
+        "label": "Abajo (Sur)",
+        "hint": "Se muestra cuando el token se mueve hacia el espectador."
+      },
+      "sw": {
+        "label": "Abajo-Izquierda (Suroeste)",
+        "hint": "Si está vacía usa Sur u Oeste."
+      },
+      "w": {
+        "label": "Izquierda (Oeste)",
+        "hint": "Se muestra cuando el token se mueve hacia la izquierda."
+      },
+      "nw": {
+        "label": "Arriba-Izquierda (Noroeste)",
+        "hint": "Si está vacía usa Norte u Oeste."
+      }
+    },
+    "MODES": {
+      "inherit": "Usar el valor del mundo",
+      "1": {
+        "label": "1 imagen (estándar)",
+        "hint": "Una sola imagen. Se comporta como un token normal de Foundry."
+      },
+      "2": {
+        "label": "2 imágenes (frente / espalda)",
+        "hint": "Arte de frente y de espalda, ideal para sprites sencillos."
+      },
+      "4": {
+        "label": "4 imágenes (N, S, E, O)",
+        "hint": "Arte clásico de cuatro direcciones estilo JRPG."
+      },
+      "8": {
+        "label": "8 imágenes (N, NE, E, SE, S, SO, O, NO)",
+        "hint": "Ocho direcciones completas para tokens isométricos detallados."
+      }
+    },
+    "TRANSFORM": {
+      "offsetX": "Posición X",
+      "offsetY": "Posición Y",
+      "offsetZ": "Elevación (Z)",
+      "artScale": "Escala del Token",
+      "baseScale": "Escala de la Base",
+      "baseRotation": "Rotación de la Base"
+    },
+    "BUTTONS": {
+      "clearField": "Limpiar",
+      "resetTransform": "Restablecer Posición",
+      "preview": "Vista previa",
+      "reset": "Restablecer",
+      "clearAll": "Borrar todo",
+      "apply": "Aplicar a Token Seleccionado",
+      "applyPrototype": "Guardar en el Actor",
+      "cancel": "Cancelar"
+    },
+    "HINTS": {
+      "notEnabled": "Hay imágenes configuradas pero «Activar Imágenes Direccionales» está desactivado, así que no cambiará nada en el lienzo.",
+      "emptyKeepsCurrent": "Dejar una dirección vacía conserva el arte actual del token en lugar de cambiarlo. Se admiten archivos GIF y WEBM.",
+      "transform": "La posición y la escala solo afectan al arte; nunca al tamaño del token en la rejilla ni a las casillas que ocupa."
+    },
+    "PREVIEW": {
+      "hint": "Elige una dirección para previsualizarla.",
+      "showing": "Mostrando: {direction}",
+      "showingMirrored": "Mostrando: {direction} (espejado)",
+      "mirrored": "espejado"
+    },
+    "PROVIDERS": {
+      "base": "Base",
+      "topDown": "Cenital (predeterminado)",
+      "isometric": "Isométrico",
+      "isometricMirrored": "Isométrico (espejado)"
+    },
+    "TRANSITIONS": {
+      "fade": "Fundido",
+      "swirl": "Remolino",
+      "waterDrop": "Gota de agua",
+      "morph": "Transformación",
+      "crosshatch": "Trama cruzada",
+      "wind": "Viento",
+      "waves": "Ondas",
+      "whiteNoise": "Ruido blanco",
+      "hologram": "Holograma",
+      "hole": "Agujero",
+      "holeSwirl": "Agujero en espiral",
+      "glitch": "Glitch",
+      "dots": "Puntos"
+    },
+    "HUD": {
+      "tooltip": "Imágenes Direccionales",
+      "detected": "Dirección detectada",
+      "unknown": "Desconocida",
+      "auto": "Automática",
+      "configure": "Configurar"
+    },
+    "NOTIFICATIONS": {
+      "applied": "Imágenes direccionales aplicadas a {count} token(s).",
+      "applyFailed": "No se pudieron aplicar las imágenes direccionales a \"{name}\".",
+      "noSelection": "Selecciona al menos un token primero.",
+      "notEnabled": "Imágenes guardadas, pero «Activar Imágenes Direccionales» está desactivado: márcalo para que el token las use.",
+      "prototypeSaved": "Guardado en el actor. Todo token creado a partir de ahora lo hereda.",
+      "synced": "Guardado en el actor y aplicado a {tokens} token(s) existentes en {scenes} escena(s).",
+      "syncedPartial": "Guardado en el actor y aplicado a {tokens} token(s), pero estas escenas no se pudieron actualizar: {scenes}."
+    },
+    "Settings": {
+      "License": {
+        "Name": "Licencia de Patreon",
+        "Label": "Gestionar licencia",
+        "Hint": "Conecta tu cuenta de Patreon para quitar el recordatorio de prueba gratuita, o libera la plaza de instalación para usarla en otro sitio. Solo GM: todas las funciones están disponibles de todos modos."
+      }
+    },
+    "License": {
+      "TrialBadge": "Prueba gratuita",
+      "TrialIntro": "Estás usando Directional Token Images en modo Prueba Gratuita: todas las funciones están desbloqueadas.",
+      "TrialPitch": "Únete a Patreon para apoyar el desarrollo, quitar este recordatorio y desbloquear este módulo y muchos más.",
+      "TrialIntroPlayer": "Tu GM está usando Directional Token Images en modo Prueba Gratuita.",
+      "TrialPlayerNote": "No tienes que hacer nada: la mesa tiene todas las funciones disponibles.",
+      "Connect": "Conectar con Patreon",
+      "Opening": "Abriendo Patreon…",
+      "HaveCode": "Tengo un código",
+      "Later": "Más tarde",
+      "Close": "Cerrar",
+      "Cancelled": "Autorización cancelada. Si no se abrió la ventana emergente, usa la opción «Tengo un código».",
+      "Connected": "Conectado como suscriptor {tier}. ¡Bienvenido!",
+      "CodeTitle": "Introducir código",
+      "CodeHint": "Pega el código que aparece tras conectar tu cuenta de Patreon.",
+      "Activate": "Activar",
+      "StatusActive": "Licencia activa: suscriptor {tier}. ¡Gracias por tu apoyo!",
+      "StatusTrusted": "Licencia verificada. Se revalida sola: no se te volverá a preguntar.",
+      "Released": "Plaza de instalación liberada.",
+      "Release": "Liberar instalación",
+      "ReleaseHint": "Libera la plaza si vas a mover tu suscripción a otro servidor o navegador.",
+      "ReleaseConfirm": "¿Liberar esta instalación? Directional Token Images sigue funcionando, pero el recordatorio de prueba gratuita volverá hasta que conectes de nuevo."
+    },
+    "SETTINGS": {
+      "defaultMode": {
+        "name": "Conjunto de imágenes por defecto",
+        "hint": "El conjunto que usan los tokens configurados para seguir el valor del mundo."
+      },
+      "directionProvider": {
+        "name": "Proveedor de dirección",
+        "hint": "Cómo se traduce el movimiento en una orientación. Otros módulos pueden registrar proveedores para proyecciones personalizadas."
+      },
+      "angleOffset": {
+        "name": "Desfase de orientación",
+        "hint": "Rota la dirección detectada estos grados antes de elegir imagen. Útil para mapas cuyo arte está dibujado en ángulo."
+      },
+      "sensitivity": {
+        "name": "Sensibilidad de dirección",
+        "hint": "Por encima de 1 favorece las direcciones cardinales; por debajo de 1 favorece las diagonales (y el movimiento horizontal en modo de 4 imágenes)."
+      },
+      "movementThreshold": {
+        "name": "Umbral de movimiento",
+        "hint": "Distancia mínima en píxeles que debe recorrer un token antes de que su arte pueda cambiar."
+      },
+      "updateDuringDrag": {
+        "name": "Actualizar durante el arrastre",
+        "hint": "Cambia el arte en vivo mientras se arrastra el token. Solo afecta a la vista previa; nada se guarda hasta soltar."
+      },
+      "applyAfterMovement": {
+        "name": "Actualizar solo al terminar el movimiento",
+        "hint": "Espera a que acabe la animación antes de cambiar. Cuesta una actualización extra por movimiento; déjalo desactivado para el resultado más fluido."
+      },
+      "smoothTransition": {
+        "name": "Transición suave",
+        "hint": "Funde entre imágenes en lugar de cambiarlas de golpe."
+      },
+      "transitionType": {
+        "name": "Estilo de transición",
+        "hint": "El efecto visual usado al cambiar el arte."
+      },
+      "transitionSpeed": {
+        "name": "Velocidad de transición",
+        "hint": "Duración de la transición en milisegundos. La velocidad de movimiento nunca se ve afectada."
+      },
+      "preloadTextures": {
+        "name": "Precargar texturas",
+        "hint": "Calienta la caché de texturas al cargar la escena para que el primer cambio no dé tirones."
+      },
+      "showHudButton": {
+        "name": "Mostrar botón en el HUD",
+        "hint": "Añade un control de dirección al HUD del token para pruebas y ajustes manuales."
+      },
+      "debug": {
+        "name": "Modo depuración",
+        "hint": "Registra información detallada de dirección y cambios en la consola del navegador."
+      }
+    }
+  }
+}

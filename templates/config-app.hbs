@@ -1,0 +1,50 @@
+{{!--
+    The standalone Directional Token Images configurator.
+    Two columns: image selection on the left, transform + live preview on the right.
+--}}
+<div class="dti-app-body">
+    <header class="dti-app-header">
+        <span class="dti-target">
+            {{#if tokenName}}
+            <i class="fa-solid {{#if isPrototype}}fa-address-card{{else}}fa-user{{/if}}" inert></i> {{tokenName}}
+            {{else}}
+            <i class="fa-solid fa-triangle-exclamation" inert></i> {{localize "DTI.APP.noTarget"}}
+            {{/if}}
+        </span>
+        {{#if isPrototype}}
+        <span class="dti-target-count">{{localize "DTI.APP.prototypeScope"}}</span>
+        {{else if multiple}}
+        <span class="dti-target-count">{{localize "DTI.APP.appliesToCount" count=count}}</span>
+        {{/if}}
+    </header>
+
+    <div class="dti-columns">
+        <div class="dti-column dti-column-left">
+            {{> dti-image-fields}}
+        </div>
+        <div class="dti-column dti-column-right">
+            {{> dti-transform-fields}}
+            {{> dti-preview}}
+        </div>
+    </div>
+
+    {{#if canPropagate}}
+    {{!--
+        Saving the prototype only affects tokens created from now on. This offers to bring the ones
+        already placed on scenes up to date in the same action.
+    --}}
+    <div class="dti-propagate">
+        <label class="checkbox">
+            <input type="checkbox" name="dtiPropagate" checked>
+            <span>{{localize "DTI.APP.propagate"}}</span>
+        </label>
+        <p class="hint">
+            {{#if placedCount}}
+            {{localize "DTI.APP.propagateHint" count=placedCount}}
+            {{else}}
+            {{localize "DTI.APP.propagateNone"}}
+            {{/if}}
+        </p>
+    </div>
+    {{/if}}
+</div>

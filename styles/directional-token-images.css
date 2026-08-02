@@ -1,0 +1,574 @@
+/*
+ * Directional Token Images
+ * All rules are scoped under `.directional-token-images` (the Token Configuration tab) or
+ * `.dti-config-app` (the standalone configurator) so nothing leaks into other sheets.
+ */
+
+.directional-token-images,
+.dti-config-app {
+  --dti-accent-default: #94a3b8;
+  --dti-accent-n: #4ade80;
+  --dti-accent-ne: #a3e635;
+  --dti-accent-e: #fbbf24;
+  --dti-accent-se: #fb923c;
+  --dti-accent-s: #f87171;
+  --dti-accent-sw: #c084fc;
+  --dti-accent-w: #60a5fa;
+  --dti-accent-nw: #38bdf8;
+
+  --dti-panel: rgba(0, 0, 0, 0.16);
+  --dti-border: rgba(127, 127, 127, 0.35);
+  --dti-radius: 6px;
+  --dti-thumb-size: 42px;
+}
+
+/* -------------------------------------------- */
+/*  Sections                                    */
+/* -------------------------------------------- */
+
+.directional-token-images .dti-section,
+.dti-config-app .dti-section {
+  border: 1px solid var(--dti-border);
+  border-radius: var(--dti-radius);
+  background: var(--dti-panel);
+  padding: 0.5rem 0.75rem 0.75rem;
+  margin-block-end: 0.75rem;
+}
+
+.directional-token-images .dti-section > legend,
+.dti-config-app .dti-section > legend {
+  font-weight: 700;
+  padding-inline: 0.4rem;
+}
+
+/*
+ * The master switch and the image set are pinned so they cannot scroll out of sight: a token whose
+ * images are filled in but whose "Enable" box is unticked silently does nothing.
+ */
+.dti-sticky-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin: -0.25rem -0.25rem 0.5rem;
+  padding: 0.4rem 0.25rem;
+  border-block-end: 1px solid var(--dti-border);
+  border-radius: var(--dti-radius) var(--dti-radius) 0 0;
+  background: var(--color-bg-option, #1c1c1c);
+  backdrop-filter: blur(2px);
+}
+
+.dti-sticky-head .form-group {
+  margin-block: 0.2rem;
+}
+
+.dti-enable-row label {
+  font-weight: 700;
+}
+
+.dti-disabled-warning {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0.35rem 0 0;
+  padding: 0.3rem 0.45rem;
+  border-radius: var(--dti-radius);
+  border: 1px solid var(--dti-accent-e);
+  background: rgba(251, 191, 36, 0.12);
+  color: var(--dti-accent-e);
+  font-size: var(--font-size-11);
+}
+
+.dti-disabled-warning[hidden] {
+  display: none;
+}
+
+.directional-token-images .dti-subheading,
+.dti-config-app .dti-subheading {
+  margin: 0.75rem 0 0.35rem;
+  padding-block-end: 0.25rem;
+  border-block-end: 1px solid var(--dti-border);
+  font-size: var(--font-size-13);
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.directional-token-images .dti-note,
+.dti-config-app .dti-note {
+  margin-block-start: 0.5rem;
+  font-size: var(--font-size-11);
+  opacity: 0.75;
+}
+
+/* -------------------------------------------- */
+/*  Image rows                                  */
+/* -------------------------------------------- */
+
+.directional-token-images .dti-rows,
+.dti-config-app .dti-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.directional-token-images .dti-row[hidden],
+.dti-config-app .dti-row[hidden] {
+  display: none;
+}
+
+.directional-token-images .dti-row-label,
+.dti-config-app .dti-row-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  font-size: var(--font-size-12);
+  margin-block-end: 0.15rem;
+}
+
+.directional-token-images .dti-row-fields,
+.dti-config-app .dti-row-fields {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.directional-token-images .dti-row-fields file-picker,
+.dti-config-app .dti-row-fields file-picker {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Badge marking a row whose artwork is supplied by the opposite side, flipped. */
+.dti-mirror-badge {
+  display: none;
+  align-items: center;
+  gap: 0.2rem;
+  margin-inline-start: auto;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  border: 1px dashed var(--dti-border);
+  font-size: var(--font-size-10);
+  font-weight: 400;
+  opacity: 0.75;
+}
+
+.dti-row[data-mirrored] .dti-mirror-badge {
+  display: inline-flex;
+}
+
+.directional-token-images .dti-row .hint,
+.dti-config-app .dti-row .hint {
+  margin: 0.1rem 0 0;
+  font-size: var(--font-size-10);
+  opacity: 0.6;
+}
+
+/* Accent the arrow glyph of each direction. */
+.dti-accent-default .dti-row-label > i,
+.dti-compass-button.dti-accent-default > i { color: var(--dti-accent-default); }
+.dti-accent-n .dti-row-label > i,
+.dti-compass-button.dti-accent-n > i { color: var(--dti-accent-n); }
+.dti-accent-ne .dti-row-label > i,
+.dti-compass-button.dti-accent-ne > i { color: var(--dti-accent-ne); }
+.dti-accent-e .dti-row-label > i,
+.dti-compass-button.dti-accent-e > i { color: var(--dti-accent-e); }
+.dti-accent-se .dti-row-label > i,
+.dti-compass-button.dti-accent-se > i { color: var(--dti-accent-se); }
+.dti-accent-s .dti-row-label > i,
+.dti-compass-button.dti-accent-s > i { color: var(--dti-accent-s); }
+.dti-accent-sw .dti-row-label > i,
+.dti-compass-button.dti-accent-sw > i { color: var(--dti-accent-sw); }
+.dti-accent-w .dti-row-label > i,
+.dti-compass-button.dti-accent-w > i { color: var(--dti-accent-w); }
+.dti-accent-nw .dti-row-label > i,
+.dti-compass-button.dti-accent-nw > i { color: var(--dti-accent-nw); }
+
+/* -------------------------------------------- */
+/*  Thumbnails                                  */
+/* -------------------------------------------- */
+
+.directional-token-images .dti-thumb,
+.dti-config-app .dti-thumb {
+  flex: 0 0 var(--dti-thumb-size);
+  width: var(--dti-thumb-size);
+  height: var(--dti-thumb-size);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--dti-border);
+  border-radius: var(--dti-radius);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.directional-token-images .dti-thumb img,
+.directional-token-images .dti-thumb video,
+.dti-config-app .dti-thumb img,
+.dti-config-app .dti-thumb video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border: none;
+}
+
+.directional-token-images .dti-thumb > i,
+.dti-config-app .dti-thumb > i {
+  opacity: 0.35;
+}
+
+/* -------------------------------------------- */
+/*  Buttons                                     */
+/* -------------------------------------------- */
+
+.directional-token-images .dti-clear,
+.dti-config-app .dti-clear {
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  line-height: 1;
+  border-radius: var(--dti-radius);
+}
+
+.directional-token-images .dti-wide-button,
+.dti-config-app .dti-wide-button {
+  width: 100%;
+  margin-block-start: 0.35rem;
+}
+
+.directional-token-images .dti-actions,
+.dti-config-app .dti-actions {
+  display: flex;
+  gap: 0.4rem;
+  margin-block-start: 0.25rem;
+}
+
+.directional-token-images .dti-actions > button,
+.dti-config-app .dti-actions > button {
+  flex: 1;
+}
+
+.directional-token-images .dti-danger,
+.dti-config-app .dti-danger {
+  color: var(--dti-accent-s);
+}
+
+/* Segmented File Picker / URL switch. */
+.directional-token-images .dti-segmented,
+.dti-config-app .dti-segmented {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--dti-border);
+  border-radius: var(--dti-radius);
+  overflow: hidden;
+}
+
+.directional-token-images .dti-segment,
+.dti-config-app .dti-segment {
+  flex: 1;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  font-size: var(--font-size-12);
+}
+
+.directional-token-images .dti-segment.active,
+.dti-config-app .dti-segment.active {
+  background: var(--dti-accent-e);
+  color: #1a1a1a;
+  font-weight: 700;
+}
+
+/* URL mode hides the browse button and leaves a plain path field. */
+.dti-images[data-load-method="url"] file-picker > button {
+  display: none;
+}
+
+/* -------------------------------------------- */
+/*  Transform sliders                           */
+/* -------------------------------------------- */
+
+.directional-token-images .dti-slider-group .form-fields,
+.dti-config-app .dti-slider-group .form-fields {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.directional-token-images .dti-range,
+.dti-config-app .dti-range {
+  flex: 1;
+}
+
+.directional-token-images .dti-number,
+.dti-config-app .dti-number {
+  flex: 0 0 72px;
+  text-align: center;
+}
+
+/* Base-only controls are dimmed until a base image is chosen. */
+.directional-token-images[data-has-base="false"] .dti-requires-base,
+.dti-config-app[data-has-base="false"] .dti-requires-base {
+  opacity: 0.5;
+}
+
+/* -------------------------------------------- */
+/*  Preview compass                             */
+/* -------------------------------------------- */
+
+.directional-token-images .dti-compass,
+.dti-config-app .dti-compass {
+  display: grid;
+  grid-template-columns: 34px 1fr 34px;
+  grid-template-rows: 34px 1fr 34px;
+  gap: 0.35rem;
+  place-items: center;
+  min-height: 210px;
+}
+
+.dti-compass-stage {
+  grid-column: 2;
+  grid-row: 2;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 150px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--dti-border);
+  border-radius: var(--dti-radius);
+  background: radial-gradient(circle at 50% 60%, rgba(255, 255, 255, 0.06), transparent 70%);
+  overflow: hidden;
+}
+
+.dti-compass-stage > img {
+  position: absolute;
+  max-width: 88%;
+  max-height: 88%;
+  object-fit: contain;
+  border: none;
+  transform-origin: center center;
+}
+
+/*
+ * Mirrored artwork.
+ * The inline transform written by the form controller already carries the horizontal flip, so this
+ * rule only supplies the corner marker that tells the user the drawing is being reused.
+ */
+.dti-compass-stage[data-mirrored]::after {
+  content: "\f337"; /* fa-left-right */
+  font-family: "Font Awesome 6 Pro", "Font Awesome 6 Free", "Font Awesome 5 Free", sans-serif;
+  font-weight: 900;
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  font-size: 12px;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.dti-compass-button[data-mirrored] {
+  border-style: dashed;
+}
+
+.dti-preview-base {
+  bottom: 6%;
+  max-height: 42%;
+  opacity: 0.95;
+}
+
+.dti-preview-empty {
+  font-size: 2rem;
+  opacity: 0.25;
+}
+
+.dti-compass-button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--dti-border);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.dti-compass-button:hover {
+  box-shadow: 0 0 6px currentcolor;
+}
+
+.dti-compass-button.active {
+  border-color: currentcolor;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.dti-compass-button[data-empty] {
+  opacity: 0.35;
+}
+
+.dti-compass-button[hidden] {
+  display: none;
+}
+
+/* The fallback slot only earns a compass button in single-image mode, where it is the only image. */
+.dti-preview:not([data-mode="1"]) .dti-pos-default {
+  display: none;
+}
+
+/* Compass placement. */
+.dti-pos-nw, .dti-pos-default { grid-column: 1; grid-row: 1; }
+.dti-pos-n  { grid-column: 2; grid-row: 1; }
+.dti-pos-ne { grid-column: 3; grid-row: 1; }
+.dti-pos-w  { grid-column: 1; grid-row: 2; }
+.dti-pos-e  { grid-column: 3; grid-row: 2; }
+.dti-pos-sw { grid-column: 1; grid-row: 3; }
+.dti-pos-s  { grid-column: 2; grid-row: 3; }
+.dti-pos-se { grid-column: 3; grid-row: 3; }
+
+.dti-preview-label {
+  margin: 0.5rem 0 0;
+  text-align: center;
+  font-size: var(--font-size-11);
+  opacity: 0.75;
+}
+
+/* -------------------------------------------- */
+/*  Standalone configurator layout              */
+/* -------------------------------------------- */
+
+.dti-config-app .dti-app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-block-end: 0.5rem;
+  margin-block-end: 0.5rem;
+  border-block-end: 1px solid var(--dti-border);
+  font-weight: 600;
+}
+
+.dti-config-app .dti-target-count {
+  font-size: var(--font-size-11);
+  opacity: 0.75;
+}
+
+.dti-config-app .dti-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.dti-config-app .dti-column {
+  min-width: 0;
+  max-height: 62vh;
+  overflow-y: auto;
+}
+
+@media (max-width: 720px) {
+  .dti-config-app .dti-columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.dti-config-app .dti-primary {
+  font-weight: 700;
+}
+
+.dti-config-app .dti-propagate {
+  margin-block-start: 0.6rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--dti-border);
+  border-radius: var(--dti-radius);
+  background: var(--dti-panel);
+}
+
+.dti-config-app .dti-propagate label.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dti-config-app .dti-propagate .hint {
+  margin: 0.2rem 0 0;
+  font-size: var(--font-size-11);
+  opacity: 0.75;
+}
+
+/* -------------------------------------------- */
+/*  Token HUD palette                           */
+/* -------------------------------------------- */
+
+.dti-hud-palette {
+  display: none;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.4rem;
+  border-radius: var(--dti-radius, 6px);
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(127, 127, 127, 0.4);
+  min-width: 150px;
+}
+
+.dti-hud-palette.active {
+  display: flex;
+}
+
+.dti-hud-current {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.dti-hud-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+}
+
+.dti-hud-value {
+  font-size: 12px;
+}
+
+.dti-hud-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 2px;
+  place-items: center;
+}
+
+.dti-hud-control {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(127, 127, 127, 0.4);
+  cursor: pointer;
+}
+
+.dti-hud-control:hover,
+.dti-hud-control.active {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.dti-hud-auto {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.dti-hud-configure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  font-size: 11px;
+  padding-block-start: 0.25rem;
+  border-block-start: 1px solid rgba(127, 127, 127, 0.3);
+  cursor: pointer;
+}

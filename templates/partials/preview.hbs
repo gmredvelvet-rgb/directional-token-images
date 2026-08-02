@@ -1,0 +1,32 @@
+{{!--
+    Live artwork preview with a compass of direction buttons around it.
+    Every slot is rendered up-front and hidden by mode, so switching the image-set mode never has to
+    rebuild the DOM.
+    Expects the context produced by scripts/apps/field-builder.js#buildFieldContext.
+--}}
+<fieldset class="dti-section dti-preview" data-mode="{{dti.mode}}">
+    <legend>{{localize "DTI.SECTIONS.preview"}}</legend>
+
+    <div class="dti-compass" data-active-slot="{{dti.previewSlot}}">
+        {{#each dti.images}}
+        <button type="button"
+                class="dti-compass-button dti-accent-{{this.slot}} dti-pos-{{this.slot}}{{#if this.isPreviewSlot}} active{{/if}}"
+                data-dti-action="previewDirection" data-slot="{{this.slot}}" data-modes="{{this.modes}}"
+                data-tooltip="{{localize this.label}}" aria-label="{{localize this.label}}"
+                {{#if this.isMirrored}}data-mirrored="true"{{/if}}
+                {{#if this.hidden}}hidden{{/if}} {{#unless this.resolved}}data-empty="true"{{/unless}}>
+            <i class="{{this.icon}}" inert></i>
+        </button>
+        {{/each}}
+
+        <div class="dti-compass-stage" {{#if dti.previewMirrored}}data-mirrored="true"{{/if}}>
+            <img class="dti-preview-base" src="{{dti.base.value}}" alt="" {{#unless dti.base.hasValue}}hidden{{/unless}}>
+            <img class="dti-preview-art" src="{{dti.previewSrc}}" alt="" {{#unless dti.previewSrc}}hidden{{/unless}}>
+            <span class="dti-preview-empty" {{#if dti.previewSrc}}hidden{{/if}}>
+                <i class="fa-regular fa-image" inert></i>
+            </span>
+        </div>
+    </div>
+
+    <p class="dti-preview-label" data-preview-label>{{localize "DTI.PREVIEW.hint"}}</p>
+</fieldset>

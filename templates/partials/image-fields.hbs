@@ -1,0 +1,128 @@
+{{!--
+    Directional image selection.
+    Shared by the standalone configurator and the Token Configuration tab.
+    Expects the context produced by scripts/apps/field-builder.js#buildFieldContext.
+--}}
+<fieldset class="dti-section dti-images" data-load-method="{{dti.loadMethod}}" data-mode="{{dti.mode}}">
+    <legend>{{localize "DTI.SECTIONS.images"}}</legend>
+
+    {{!--
+        The master switch and the image set stay pinned to the top of the scrollable column: a token
+        whose images are filled in but whose "Enable" box is unticked does nothing, and that box must
+        never be able to scroll out of sight.
+    --}}
+    <div class="dti-sticky-head">
+        <div class="form-group dti-toggle dti-enable-row">
+            <label for="{{dti.prefix}}enabled">{{localize "DTI.FIELDS.enabled.label"}}</label>
+            <div class="form-fields">
+                <input type="checkbox" id="{{dti.prefix}}enabled" name="{{dti.enabled.name}}" {{checked dti.enabled.value}}>
+            </div>
+            <p class="hint">{{localize "DTI.FIELDS.enabled.hint"}}</p>
+        </div>
+
+        <div class="form-group">
+            <label for="{{dti.prefix}}mode">{{localize "DTI.FIELDS.mode.label"}}</label>
+            <div class="form-fields">
+                <select id="{{dti.prefix}}mode" name="{{dti.prefix}}mode" class="dti-mode-select">
+                    {{selectOptions dti.modeChoices selected=dti.modeValue localize=true}}
+                </select>
+            </div>
+        </div>
+
+        <p class="dti-disabled-warning" data-disabled-warning>
+            <i class="fa-solid fa-triangle-exclamation" inert></i>
+            {{localize "DTI.HINTS.notEnabled"}}
+        </p>
+    </div>
+
+    <div class="form-group dti-toggle dti-mirror" data-modes="{{dti.mirror.modes}}" {{#if dti.mirror.hidden}}hidden{{/if}}>
+        <label for="{{dti.mirror.name}}">{{localize "DTI.FIELDS.mirrorHorizontal.label"}}</label>
+        <div class="form-fields">
+            <input type="checkbox" id="{{dti.mirror.name}}" name="{{dti.mirror.name}}" {{checked dti.mirror.value}}>
+        </div>
+        <p class="hint">{{localize "DTI.FIELDS.mirrorHorizontal.hint"}}</p>
+    </div>
+
+    <div class="form-group dti-load-method">
+        <label>{{localize "DTI.FIELDS.loadMethod.label"}}</label>
+        <div class="form-fields dti-segmented">
+            <button type="button" class="dti-segment {{#unless dti.isUrlMode}}active{{/unless}}"
+                    data-dti-action="setLoadMethod" data-method="picker">
+                <i class="fa-solid fa-folder-open" inert></i>
+                <span>{{localize "DTI.FIELDS.loadMethod.picker"}}</span>
+            </button>
+            <button type="button" class="dti-segment {{#if dti.isUrlMode}}active{{/if}}"
+                    data-dti-action="setLoadMethod" data-method="url">
+                <i class="fa-solid fa-link" inert></i>
+                <span>{{localize "DTI.FIELDS.loadMethod.url"}}</span>
+            </button>
+            <input type="hidden" name="{{dti.prefix}}loadMethod" value="{{dti.loadMethod}}" class="dti-load-method-input">
+        </div>
+    </div>
+
+    <div class="dti-row dti-base-row" data-slot="base">
+        <label class="dti-row-label">
+            <i class="fa-solid fa-circle-notch" inert></i>
+            <span>{{localize "DTI.FIELDS.base.label"}}</span>
+        </label>
+        <div class="dti-row-fields">
+            <span class="dti-thumb" data-thumb-for="base">
+                {{#if dti.base.hasValue}}
+                    {{#if dti.base.isVideo}}
+                        <video src="{{dti.base.value}}" autoplay loop muted playsinline disablepictureinpicture></video>
+                    {{else}}
+                        <img src="{{dti.base.value}}" alt="">
+                    {{/if}}
+                {{else}}
+                    <i class="fa-regular fa-image" inert></i>
+                {{/if}}
+            </span>
+            <file-picker name="{{dti.base.name}}" type="{{dti.pickerType}}" value="{{dti.base.value}}"
+                         placeholder="{{localize 'DTI.FIELDS.base.placeholder'}}"></file-picker>
+            <button type="button" class="dti-clear" data-dti-action="clearField" data-field="{{dti.base.name}}"
+                    data-tooltip="DTI.BUTTONS.clearField" aria-label="{{localize 'DTI.BUTTONS.clearField'}}">
+                <i class="fa-solid fa-xmark" inert></i>
+            </button>
+        </div>
+    </div>
+
+    <h4 class="dti-subheading">{{localize "DTI.SECTIONS.directionalViews"}}</h4>
+
+    <div class="dti-rows">
+        {{#each dti.images}}
+        <div class="dti-row dti-accent-{{this.slot}}" data-slot="{{this.slot}}" data-modes="{{this.modes}}"
+             {{#if this.isMirrored}}data-mirrored="true"{{/if}} {{#if this.hidden}}hidden{{/if}}>
+            <label class="dti-row-label" for="{{this.name}}">
+                <i class="{{this.icon}}" inert></i>
+                <span>{{localize this.label}}</span>
+                <span class="dti-mirror-badge" data-mirror-badge>
+                    <i class="fa-solid fa-left-right" inert></i>
+                    {{localize "DTI.PREVIEW.mirrored"}}
+                </span>
+            </label>
+            <div class="dti-row-fields">
+                <span class="dti-thumb" data-thumb-for="{{this.slot}}">
+                    {{#if this.hasValue}}
+                        {{#if this.isVideo}}
+                            <video src="{{this.value}}" autoplay loop muted playsinline disablepictureinpicture></video>
+                        {{else}}
+                            <img src="{{this.value}}" alt="">
+                        {{/if}}
+                    {{else}}
+                        <i class="fa-regular fa-image" inert></i>
+                    {{/if}}
+                </span>
+                <file-picker id="{{this.name}}" name="{{this.name}}" type="{{@root.dti.pickerType}}"
+                             value="{{this.value}}"></file-picker>
+                <button type="button" class="dti-clear" data-dti-action="clearField" data-field="{{this.name}}"
+                        data-tooltip="DTI.BUTTONS.clearField" aria-label="{{localize 'DTI.BUTTONS.clearField'}}">
+                    <i class="fa-solid fa-xmark" inert></i>
+                </button>
+            </div>
+            <p class="hint">{{localize this.hint}}</p>
+        </div>
+        {{/each}}
+    </div>
+
+    <p class="notes dti-note">{{localize "DTI.HINTS.emptyKeepsCurrent"}}</p>
+</fieldset>

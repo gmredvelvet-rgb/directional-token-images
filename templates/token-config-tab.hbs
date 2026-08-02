@@ -1,0 +1,27 @@
+{{!--
+    The "Directional Images" tab injected into the Token Configuration sheet.
+    Rendered by core as a regular sheet part, so every input submits through core's own form
+    handling: the names are already the flag paths this module reads.
+--}}
+<div class="tab scrollable directional-token-images{{#if tab.active}} active{{/if}}"
+     data-group="{{tab.group}}" data-tab="{{tab.id}}" data-application-part="directional">
+
+    {{> dti-image-fields}}
+    {{> dti-transform-fields}}
+    {{> dti-preview}}
+
+    <div class="dti-actions">
+        <button type="button" data-dti-action="preview">
+            <i class="fa-solid fa-eye" inert></i>
+            <span>{{localize "DTI.BUTTONS.preview"}}</span>
+        </button>
+        <button type="button" data-dti-action="reset">
+            <i class="fa-solid fa-arrow-rotate-left" inert></i>
+            <span>{{localize "DTI.BUTTONS.reset"}}</span>
+        </button>
+        <button type="button" class="dti-danger" data-dti-action="clearAll">
+            <i class="fa-solid fa-trash" inert></i>
+            <span>{{localize "DTI.BUTTONS.clearAll"}}</span>
+        </button>
+    </div>
+</div>

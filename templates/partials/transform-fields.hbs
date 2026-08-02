@@ -1,0 +1,27 @@
+{{!--
+    Artwork offset / scale controls plus the optional base transform.
+    Expects the context produced by scripts/apps/field-builder.js#buildFieldContext.
+--}}
+<fieldset class="dti-section dti-transform">
+    <legend>{{localize "DTI.SECTIONS.transform"}}</legend>
+
+    {{#each dti.transforms}}
+    <div class="form-group dti-slider-group{{#if this.requiresBase}} dti-requires-base{{/if}}">
+        <label for="{{this.name}}">{{localize this.label}}</label>
+        <div class="form-fields">
+            <input type="range" class="dti-range" data-for="{{this.name}}" value="{{this.value}}"
+                   min="{{this.min}}" max="{{this.max}}" step="{{this.step}}" aria-hidden="true" tabindex="-1">
+            <input type="number" id="{{this.name}}" name="{{this.name}}" class="dti-number" value="{{this.value}}"
+                   min="{{this.min}}" max="{{this.max}}" step="{{this.step}}">
+            {{#if this.suffix}}<span class="units">{{this.suffix}}</span>{{/if}}
+        </div>
+    </div>
+    {{/each}}
+
+    <button type="button" class="dti-wide-button" data-dti-action="resetTransform">
+        <i class="fa-solid fa-arrow-rotate-left" inert></i>
+        <span>{{localize "DTI.BUTTONS.resetTransform"}}</span>
+    </button>
+
+    <p class="notes dti-note">{{localize "DTI.HINTS.transform"}}</p>
+</fieldset>

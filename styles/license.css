@@ -1,0 +1,140 @@
+/* ==========================================================================
+   Directional Token Images — licence / free-trial card
+
+   Lives on <body>, outside every application, so it cannot inherit any sheet's
+   variables and commits to this module's own dark-and-amber palette. Fonts are
+   left to Foundry's stack rather than naming faces the module does not ship.
+   ========================================================================== */
+
+.dti-license-card {
+  --dti-license-accent: #fbbf24;
+  --dti-license-text: #e8e3d8;
+  --dti-license-muted: #9a927f;
+
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: max(16px, env(safe-area-inset-bottom, 0px));
+  z-index: 10000;
+  width: min(330px, calc(100vw - 32px));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 20px;
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  border-radius: 6px;
+  background: linear-gradient(180deg, #1b1a18, #0d0c0b);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+  color: var(--dti-license-text);
+  animation: dti-license-in 0.45s ease both;
+}
+
+@keyframes dti-license-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dti-license-card { animation: none; }
+}
+
+.dti-license-card header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--dti-license-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.dti-license-card .dti-license-badge {
+  margin-left: auto;
+  padding: 2px 8px;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  border-radius: 3px;
+  color: var(--dti-license-text);
+  font-size: 0.56rem;
+  letter-spacing: 0.18em;
+  white-space: nowrap;
+}
+
+.dti-license-card p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.dti-license-card .dti-license-note {
+  margin-bottom: 8px;
+  color: var(--dti-license-muted);
+  font-size: 0.86rem;
+  font-style: italic;
+}
+
+.dti-license-card :is(button, .dti-license-primary) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 14px;
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--dti-license-text);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.25s ease, color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.dti-license-card button:hover {
+  border-color: var(--dti-license-accent);
+  color: var(--dti-license-accent);
+  background: rgba(251, 191, 36, 0.08);
+  box-shadow: 0 0 14px rgba(251, 191, 36, 0.22);
+}
+
+.dti-license-card button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.dti-license-card .dti-license-primary {
+  border-color: transparent;
+  background: var(--dti-license-accent);
+  color: #1b1a18;
+}
+
+.dti-license-card .dti-license-primary:hover {
+  background: #ffd257;
+  color: #1b1a18;
+  box-shadow: 0 0 18px rgba(251, 191, 36, 0.35);
+}
+
+.dti-license-card .dti-license-dismiss {
+  min-height: 0;
+  padding: 2px;
+  border: none;
+  color: rgba(232, 227, 216, 0.62);
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.dti-license-card .dti-license-dismiss:hover {
+  border: none;
+  background: none;
+  box-shadow: none;
+  color: var(--dti-license-accent);
+}

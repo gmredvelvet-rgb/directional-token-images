@@ -1,0 +1,253 @@
+{
+  "DTI": {
+    "TAB": {
+      "label": "Directional Images"
+    },
+    "APP": {
+      "title": "Directional Token Images",
+      "noTarget": "No token selected",
+      "appliesToCount": "Applies to {count} tokens",
+      "prototype": "prototype token",
+      "prototypeScope": "Saved on the actor — every new token inherits it",
+      "propagate": "Also update tokens already placed on scenes",
+      "propagateHint": "{count} token(s) across your scenes come from this actor and will be brought up to date.",
+      "propagateNone": "No tokens from this actor are placed on any scene yet."
+    },
+    "SECTIONS": {
+      "images": "1. Select Images",
+      "directionalViews": "Directional Views",
+      "transform": "2. Position and Scale",
+      "preview": "3. Preview"
+    },
+    "FIELDS": {
+      "enabled": {
+        "label": "Enable Directional Images",
+        "hint": "Automatically swap this token's artwork based on the direction it moves in."
+      },
+      "mode": {
+        "label": "Image Set",
+        "hint": "How many artwork variants this token uses. Images configured for other sets are kept, so switching back and forth is lossless."
+      },
+      "mirrorHorizontal": {
+        "label": "Mirror left and right",
+        "hint": "Let one side's drawing serve the other, flipped horizontally: fill in East and West is produced automatically (and vice versa). Diagonals pair up the same way. Only the sign of the token's horizontal scale is changed — never its magnitude, and never its rotation."
+      },
+      "loadMethod": {
+        "label": "Load Method",
+        "picker": "File Picker",
+        "url": "URL"
+      },
+      "base": {
+        "label": "Base (optional)",
+        "placeholder": "bases/stone_circle.png"
+      }
+    },
+    "DIRECTIONS": {
+      "default": {
+        "label": "Default / Fallback",
+        "hint": "Used whenever the direction's own image is empty."
+      },
+      "n": {
+        "label": "Up (North)",
+        "hint": "Shown when the token moves away from the viewer."
+      },
+      "ne": {
+        "label": "Up-Right (North-East)",
+        "hint": "Falls back to North or East when empty."
+      },
+      "e": {
+        "label": "Right (East)",
+        "hint": "Shown when the token moves to the right."
+      },
+      "se": {
+        "label": "Down-Right (South-East)",
+        "hint": "Falls back to South or East when empty."
+      },
+      "s": {
+        "label": "Down (South)",
+        "hint": "Shown when the token moves towards the viewer."
+      },
+      "sw": {
+        "label": "Down-Left (South-West)",
+        "hint": "Falls back to South or West when empty."
+      },
+      "w": {
+        "label": "Left (West)",
+        "hint": "Shown when the token moves to the left."
+      },
+      "nw": {
+        "label": "Up-Left (North-West)",
+        "hint": "Falls back to North or West when empty."
+      }
+    },
+    "MODES": {
+      "inherit": "Use world default",
+      "1": {
+        "label": "1 image (standard)",
+        "hint": "A single image. Behaves like an ordinary Foundry token."
+      },
+      "2": {
+        "label": "2 images (front / back)",
+        "hint": "Front and back artwork, ideal for simple sprite sheets."
+      },
+      "4": {
+        "label": "4 images (N, S, E, W)",
+        "hint": "Classic JRPG-style four-direction artwork."
+      },
+      "8": {
+        "label": "8 images (N, NE, E, SE, S, SW, W, NW)",
+        "hint": "Full eight-direction artwork for detailed isometric tokens."
+      }
+    },
+    "TRANSFORM": {
+      "offsetX": "Position X",
+      "offsetY": "Position Y",
+      "offsetZ": "Elevation (Z)",
+      "artScale": "Token Scale",
+      "baseScale": "Base Scale",
+      "baseRotation": "Base Rotation"
+    },
+    "BUTTONS": {
+      "clearField": "Clear",
+      "resetTransform": "Reset Position",
+      "preview": "Preview",
+      "reset": "Reset",
+      "clearAll": "Clear All",
+      "apply": "Apply to Selected Token",
+      "applyPrototype": "Save on Actor",
+      "cancel": "Cancel"
+    },
+    "HINTS": {
+      "notEnabled": "Images are configured but \"Enable Directional Images\" is off, so nothing will change on the canvas.",
+      "emptyKeepsCurrent": "Leaving a direction empty keeps the token's current artwork instead of changing it. GIF and WEBM files are supported.",
+      "transform": "Position and scale only affect the artwork, never the token's grid footprint or its occupied squares."
+    },
+    "PREVIEW": {
+      "hint": "Pick a direction to preview it.",
+      "showing": "Showing: {direction}",
+      "showingMirrored": "Showing: {direction} (mirrored)",
+      "mirrored": "mirrored"
+    },
+    "PROVIDERS": {
+      "base": "Base",
+      "topDown": "Top-down (default)",
+      "isometric": "Isometric",
+      "isometricMirrored": "Isometric (mirrored)"
+    },
+    "TRANSITIONS": {
+      "fade": "Fade",
+      "swirl": "Swirl",
+      "waterDrop": "Water Drop",
+      "morph": "Morph",
+      "crosshatch": "Crosshatch",
+      "wind": "Wind",
+      "waves": "Waves",
+      "whiteNoise": "White Noise",
+      "hologram": "Hologram",
+      "hole": "Hole",
+      "holeSwirl": "Hole Swirl",
+      "glitch": "Glitch",
+      "dots": "Dots"
+    },
+    "HUD": {
+      "tooltip": "Directional Images",
+      "detected": "Detected direction",
+      "unknown": "Unknown",
+      "auto": "Automatic",
+      "configure": "Configure"
+    },
+    "NOTIFICATIONS": {
+      "applied": "Directional images applied to {count} token(s).",
+      "applyFailed": "Could not apply directional images to \"{name}\".",
+      "noSelection": "Select at least one token first.",
+      "notEnabled": "Images saved, but \"Enable Directional Images\" is off — tick it for the token to use them.",
+      "prototypeSaved": "Saved on the actor. Every token created from now on inherits it.",
+      "synced": "Saved on the actor and applied to {tokens} existing token(s) across {scenes} scene(s).",
+      "syncedPartial": "Saved on the actor and applied to {tokens} token(s), but these scenes could not be updated: {scenes}."
+    },
+    "Settings": {
+      "License": {
+        "Name": "Patreon licence",
+        "Label": "Manage licence",
+        "Hint": "Connect your Patreon account to remove the free-trial reminder, or release the installation slot to use it elsewhere. GM only — every feature works either way."
+      }
+    },
+    "License": {
+      "TrialBadge": "Free Trial",
+      "TrialIntro": "You are using Directional Token Images in Free Trial mode — every feature is unlocked.",
+      "TrialPitch": "Join Patreon to support development, remove this reminder and unlock this module plus many more.",
+      "TrialIntroPlayer": "Your GM is using Directional Token Images in Free Trial mode.",
+      "TrialPlayerNote": "Nothing for you to do — the table has every feature available.",
+      "Connect": "Connect with Patreon",
+      "Opening": "Opening Patreon…",
+      "HaveCode": "I have a code",
+      "Later": "Later",
+      "Close": "Close",
+      "Cancelled": "Authorisation cancelled. If the popup did not open, use the \"I have a code\" option.",
+      "Connected": "Connected as a {tier} subscriber. Welcome!",
+      "CodeTitle": "Enter code",
+      "CodeHint": "Paste the code shown after connecting your Patreon account.",
+      "Activate": "Activate",
+      "StatusActive": "Licence active — {tier} subscriber. Thank you for your support!",
+      "StatusTrusted": "Licence verified. It revalidates on its own — you will not be asked again.",
+      "Released": "Installation slot released.",
+      "Release": "Release installation",
+      "ReleaseHint": "Release the slot if you are moving your subscription to another server or browser.",
+      "ReleaseConfirm": "Release this installation? Directional Token Images keeps working, but the free-trial reminder comes back until you connect again."
+    },
+    "SETTINGS": {
+      "defaultMode": {
+        "name": "Default image set",
+        "hint": "The image set used by tokens configured to follow the world default."
+      },
+      "directionProvider": {
+        "name": "Direction provider",
+        "hint": "How movement is translated into a facing. Modules can register additional providers for custom projections."
+      },
+      "angleOffset": {
+        "name": "Facing offset",
+        "hint": "Rotates the detected direction by this many degrees before choosing an image. Useful for maps whose art is drawn on an angle."
+      },
+      "sensitivity": {
+        "name": "Direction sensitivity",
+        "hint": "Above 1 favours the cardinal directions, below 1 favours diagonals (and, in four-image mode, horizontal movement)."
+      },
+      "movementThreshold": {
+        "name": "Movement threshold",
+        "hint": "Minimum distance in pixels a token must move before its artwork may change."
+      },
+      "updateDuringDrag": {
+        "name": "Update during drag",
+        "hint": "Swap the artwork live while a token is being dragged. The preview only, nothing is saved until the drag is released."
+      },
+      "applyAfterMovement": {
+        "name": "Update only after movement ends",
+        "hint": "Wait for the movement animation to finish before swapping. Costs one extra update per move; leave off for the smoothest result."
+      },
+      "smoothTransition": {
+        "name": "Smooth transition",
+        "hint": "Cross-fade between artwork instead of cutting instantly."
+      },
+      "transitionType": {
+        "name": "Transition style",
+        "hint": "The visual effect used when the artwork changes."
+      },
+      "transitionSpeed": {
+        "name": "Transition speed",
+        "hint": "Duration of the artwork transition in milliseconds. Movement speed is never affected."
+      },
+      "preloadTextures": {
+        "name": "Preload textures",
+        "hint": "Warm the texture cache when a scene loads so the first swap never stutters."
+      },
+      "showHudButton": {
+        "name": "Show HUD button",
+        "hint": "Add a direction control to the Token HUD for testing and manual overrides."
+      },
+      "debug": {
+        "name": "Debug mode",
+        "hint": "Log detailed direction and swap information to the browser console."
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{{!--
+    Token HUD direction palette: shows the detected direction and lets a GM force one for testing.
+--}}
+<div class="palette dti-hud-palette" data-palette="directional">
+    <div class="dti-hud-current">
+        <span class="dti-hud-label">{{localize "DTI.HUD.detected"}}</span>
+        <strong class="dti-hud-value" data-dti-current>{{currentLabel}}</strong>
+    </div>
+
+    <div class="dti-hud-grid" data-mode="{{mode}}">
+        {{#each slots}}
+        <a class="dti-hud-control dti-accent-{{this.slot}} dti-pos-{{this.slot}}{{#if this.active}} active{{/if}}"
+           data-dti-action="force" data-slot="{{this.slot}}"
+           data-tooltip="{{localize this.label}}" aria-label="{{localize this.label}}">
+            <i class="{{this.icon}}" inert></i>
+        </a>
+        {{/each}}
+        <a class="dti-hud-control dti-hud-auto{{#unless forced}} active{{/unless}}" data-dti-action="auto"
+           data-tooltip="DTI.HUD.auto" aria-label="{{localize 'DTI.HUD.auto'}}">
+            <i class="fa-solid fa-arrows-rotate" inert></i>
+        </a>
+    </div>
+
+    <a class="dti-hud-configure" data-dti-action="configure">
+        <i class="fa-solid fa-sliders" inert></i>
+        <span>{{localize "DTI.HUD.configure"}}</span>
+    </a>
+</div>
