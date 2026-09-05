@@ -189,7 +189,8 @@ export class DirectionalConfigApp extends HandlebarsApplicationMixin(Application
       loadMethod: payload.loadMethod === "url" ? "url" : "picker",
       images: payload.images ?? {},
       base: payload.base ?? {},
-      art: payload.art ?? {}
+      art: payload.art ?? {},
+      visionFacing: payload.visionFacing
     };
 
     for (const document of this.documents) {

@@ -32,6 +32,13 @@
         "label": "Espejar izquierda y derecha",
         "hint": "Reutiliza el dibujo de un lado para el otro, volteado horizontalmente: rellena Este y el Oeste se genera solo (y al revés). Las diagonales se emparejan igual. Solo se cambia el signo de la escala horizontal del token, nunca su magnitud ni su rotación."
       },
+      "visionFacing": {
+        "label": "El cono de visión sigue a la imagen",
+        "hint": "Gira los conos de visión y de luz de este token para que coincidan con el dibujo que lleva puesto, de modo que la zona ciega quede siempre detrás. Sólo actúa si el ángulo de visión (o de luz) del token es menor de 360°. \"Seguir el ajuste del mundo\" usa el ajuste del módulo con ese mismo nombre.",
+        "inherit": "Seguir el ajuste del mundo",
+        "on": "Siempre",
+        "off": "Nunca"
+      },
       "loadMethod": {
         "label": "Método de carga",
         "picker": "File Picker",
@@ -127,6 +134,12 @@
       "showing": "Mostrando: {direction}",
       "showingMirrored": "Mostrando: {direction} (espejado)",
       "mirrored": "espejado"
+    },
+    "SELF_RADIUS": {
+      "off": "Desactivado",
+      "auto": "Autom\u00e1tico \u2014 ajustar a la imagen",
+      "autoScaled": "Autom\u00e1tico \u00d7{factor} \u2014 imagen con margen",
+      "squares": "{squares} casillas"
     },
     "PROVIDERS": {
       "base": "Base",
@@ -243,6 +256,14 @@
       "showHudButton": {
         "name": "Mostrar botón en el HUD",
         "hint": "Añade un control de dirección al HUD del token para pruebas y ajustes manuales."
+      },
+      "visionFollowsFacing": {
+        "name": "El cono de visión sigue a la imagen",
+        "hint": "Orienta los conos de visión y de luz de cada token direccional según la dirección del dibujo que muestra, para que la zona sin visión quede detrás del personaje y no delante. Sólo afecta a tokens cuyo ángulo de visión (o de luz) sea menor de 360°, y la orientación se guarda junto con Bloquear Rotación para que la imagen nunca gire. Funciona en mapas isométricos: la orientación se convierte con el proveedor de dirección activo."
+      },
+      "visionSelfRadius": {
+        "name": "C\u00edrculo de visi\u00f3n propia",
+        "hint": "Cu\u00e1nto ve siempre a su alrededor un token orientado, haga lo que haga su cono. Foundry calcula esto a partir de la casilla del token, muy poco para arte isom\u00e9trico dibujado mucho m\u00e1s alto que su casilla \u2014 un personaje que camina hacia la c\u00e1mara acaba con su propia cabeza en su propio punto ciego. \"Autom\u00e1tico\" mide la imagen dibujada y cubre justo eso, y es la opci\u00f3n correcta en cualquier mapa isom\u00e9trico. Los muros siguen bloqueando con normalidad y el cono no cambia ni un grado."
       },
       "debug": {
         "name": "Modo depuración",

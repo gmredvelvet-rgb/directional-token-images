@@ -7,7 +7,7 @@
  * @module directional-token-images/api/api
  */
 
-import { HOOK_EVENTS, MODULE_ID, SETTINGS } from "../constants.js";
+import { HOOK_EVENTS, MODULE_ID, SETTINGS, VISION_FACING } from "../constants.js";
 import {
   ALL_SLOTS,
   CARDINAL_SLOTS,
@@ -27,6 +27,7 @@ import { ImageCache } from "../lib/image-cache.js";
 import { Logger } from "../lib/logger.js";
 import { Settings } from "../settings/settings.js";
 import { TextureSwapper } from "../lib/texture-swapper.js";
+import { VisionFacing } from "../lib/vision-facing.js";
 
 /**
  * @typedef {import("../lib/directions.js").DirectionKey} DirectionKey
@@ -98,6 +99,12 @@ export class DirectionalTokenImagesAPI {
   /** The standalone configurator application class. @type {typeof DirectionalConfigApp} */
   static DirectionalConfigApp = DirectionalConfigApp;
 
+  /** The per-token override values for vision-cone steering. @type {Readonly<Record<string, string>>} */
+  static VISION_FACING = VISION_FACING;
+
+  /** Vision/light cone steering. @type {typeof VisionFacing} */
+  static VisionFacing = VisionFacing;
+
   /** @returns {string} The installed module version. */
   static get version() {
     return game.modules.get(MODULE_ID)?.version ?? "0.0.0";
@@ -131,12 +138,14 @@ export class DirectionalTokenImagesAPI {
    * @param {boolean} [options.mirrorHorizontal] Let one side's drawing serve the other, flipped.
    * @param {object} [options.base]             Optional base image configuration.
    * @param {object} [options.art]              Optional artwork offset/scale configuration.
+   * @param {"inherit"|"on"|"off"} [options.visionFacing] Whether this token's vision/light cone
+   *   follows the artwork, or defers to the world setting.
    * @returns {Promise<(TokenDocument|PrototypeToken)[]>} The updated documents.
    */
   static async setDirectionalImages(
     target,
     images = {},
-    { mode, enabled = true, mirrorHorizontal, base, art } = {}
+    { mode, enabled = true, mirrorHorizontal, base, art, visionFacing } = {}
   ) {
     const documents = resolveTargets(target);
     if (!documents.length) {
@@ -148,6 +157,7 @@ export class DirectionalTokenImagesAPI {
     if (mirrorHorizontal !== undefined) payload.mirrorHorizontal = mirrorHorizontal;
     if (base) payload.base = base;
     if (art) payload.art = art;
+    if (visionFacing !== undefined) payload.visionFacing = visionFacing;
 
     for (const document of documents) {
       await DirectionalTokenData.write(document, payload);

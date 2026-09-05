@@ -32,6 +32,13 @@
         "label": "Mirror left and right",
         "hint": "Let one side's drawing serve the other, flipped horizontally: fill in East and West is produced automatically (and vice versa). Diagonals pair up the same way. Only the sign of the token's horizontal scale is changed — never its magnitude, and never its rotation."
       },
+      "visionFacing": {
+        "label": "Vision cone follows the artwork",
+        "hint": "Turn this token's vision and light cones to match the drawing it is wearing, so the blind wedge always sits behind it. Only does anything when the token's vision angle (or light angle) is narrower than 360°. \"Follow world setting\" uses the module setting of the same name.",
+        "inherit": "Follow world setting",
+        "on": "Always",
+        "off": "Never"
+      },
       "loadMethod": {
         "label": "Load Method",
         "picker": "File Picker",
@@ -127,6 +134,12 @@
       "showing": "Showing: {direction}",
       "showingMirrored": "Showing: {direction} (mirrored)",
       "mirrored": "mirrored"
+    },
+    "SELF_RADIUS": {
+      "off": "Off",
+      "auto": "Auto \u2014 fit the artwork",
+      "autoScaled": "Auto \u00d7{factor} \u2014 artwork with room to spare",
+      "squares": "{squares} grid squares"
     },
     "PROVIDERS": {
       "base": "Base",
@@ -243,6 +256,14 @@
       "showHudButton": {
         "name": "Show HUD button",
         "hint": "Add a direction control to the Token HUD for testing and manual overrides."
+      },
+      "visionFollowsFacing": {
+        "name": "Vision cone follows the artwork",
+        "hint": "Aim each directional token's vision and light cones along the direction its current drawing is facing, so the unseen wedge stays behind the character instead of in front of it. Only tokens whose vision angle (or light angle) is narrower than 360° are affected, and the facing is written together with Lock Rotation so the artwork itself never turns. Works on isometric maps: the facing is mapped back through whichever direction provider is active."
+      },
+      "visionSelfRadius": {
+        "name": "Self-visibility circle",
+        "hint": "How much a steered token can always see around itself, whatever its cone is doing. Foundry sizes this from the token's grid footprint, which is far too small for isometric artwork drawn much taller than its square \u2014 a character walking towards the camera ends up with their own head inside their own blind spot. \"Auto\" measures the drawn artwork and covers exactly that, and is the right answer on any isometric map. Walls still block normally, and the cone itself is not changed by a single degree."
       },
       "debug": {
         "name": "Debug mode",

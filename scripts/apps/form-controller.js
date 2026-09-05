@@ -17,6 +17,7 @@ import { DEFAULT_DATA } from "../lib/token-images.js";
 import { FIELD_PREFIX, SLOT_META, isVideo } from "./field-builder.js";
 import { Logger } from "../lib/logger.js";
 import { Settings } from "../settings/settings.js";
+import { VISION_FACING } from "../constants.js";
 
 /**
  * @typedef {import("../lib/directions.js").DirectionKey} DirectionKey
@@ -207,7 +208,8 @@ export class DirectionalFormController {
         offsetY: read("art.offsetY", 0),
         offsetZ: read("art.offsetZ", 0),
         scale: read("art.scale", 1)
-      }
+      },
+      visionFacing: String(read("visionFacing", VISION_FACING.INHERIT))
     };
   }
 
@@ -341,6 +343,7 @@ export class DirectionalFormController {
     set("art.offsetY", data.art.offsetY);
     set("art.offsetZ", data.art.offsetZ);
     set("art.scale", data.art.scale);
+    set("visionFacing", data.visionFacing ?? VISION_FACING.INHERIT);
     this.setLoadMethod(data.loadMethod);
 
     this.syncModeVisibility();

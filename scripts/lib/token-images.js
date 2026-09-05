@@ -4,7 +4,7 @@
  * @module directional-token-images/lib/token-images
  */
 
-import { FLAGS, MODULE_ID } from "../constants.js";
+import { FLAGS, MODULE_ID, VISION_FACING } from "../constants.js";
 import {
   ALL_SLOTS,
   DEFAULT_SLOT,
@@ -48,6 +48,8 @@ import { Settings } from "../settings/settings.js";
  * @property {Record<DirectionKey, string>} images Image path per slot; empty string means unset.
  * @property {BaseConfig} base                    Optional base image configuration.
  * @property {ArtTransform} art                   Artwork offset and scale.
+ * @property {"inherit"|"on"|"off"} visionFacing  Whether this token's vision/light cone follows the
+ *   artwork, or defers to the world setting.
  */
 
 /**
@@ -70,8 +72,19 @@ export const DEFAULT_DATA = Object.freeze({
   loadMethod: "picker",
   images: Object.freeze(ALL_SLOTS.reduce((images, slot) => ({ ...images, [slot]: "" }), {})),
   base: Object.freeze({ src: "", scale: 1, rotation: 0 }),
-  art: Object.freeze({ offsetX: 0, offsetY: 0, offsetZ: 0, scale: 1 })
+  art: Object.freeze({ offsetX: 0, offsetY: 0, offsetZ: 0, scale: 1 }),
+  visionFacing: VISION_FACING.INHERIT
 });
+
+/**
+ * Coerce a stored value into one of the three vision-facing states, defaulting to `"inherit"` so a
+ * token configured before the feature existed keeps following the world setting.
+ * @param {*} value The raw value.
+ * @returns {"inherit"|"on"|"off"} A valid state.
+ */
+function toVisionFacing(value) {
+  return Object.values(VISION_FACING).includes(value) ? value : VISION_FACING.INHERIT;
+}
 
 /**
  * Coerce a value to a finite number, falling back when it is not usable.
@@ -144,7 +157,8 @@ export class DirectionalTokenData {
         offsetY: toNumber(raw[FLAGS.ART]?.offsetY, 0),
         offsetZ: toNumber(raw[FLAGS.ART]?.offsetZ, 0),
         scale: toNumber(raw[FLAGS.ART]?.scale, 1)
-      }
+      },
+      visionFacing: toVisionFacing(raw[FLAGS.VISION])
     };
   }
 
@@ -317,6 +331,8 @@ export class DirectionalTokenData {
     set(`${FLAGS.ART}.offsetY`, partial.art?.offsetY, asNumber(0));
     set(`${FLAGS.ART}.offsetZ`, partial.art?.offsetZ, asNumber(0));
     set(`${FLAGS.ART}.scale`, partial.art?.scale, asNumber(1));
+
+    set(FLAGS.VISION, partial.visionFacing, toVisionFacing);
 
     return update;
   }

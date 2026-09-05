@@ -160,6 +160,33 @@ export function rotateVector({ dx, dy }, degrees) {
 }
 
 /**
+ * The screen-space angle of a direction slot's sector centre.
+ *
+ * This is the exact inverse of {@link quantise} for a slot's ideal vector, and it is what lets
+ * consumers turn a chosen artwork back into a facing — the vision/light cone steering in
+ * {@link module:directional-token-images/lib/vision-facing} depends on it.
+ *
+ * @param {DirectionKey} slot The slot to look up.
+ * @returns {number|null} The angle in `[0, 360)`, or `null` for {@link DEFAULT_SLOT}, which carries
+ *   no direction at all.
+ */
+export function slotToAngle(slot) {
+  const angle = DIRECTION_ANGLES[slot];
+  return Number.isFinite(angle) ? angle : null;
+}
+
+/**
+ * The smallest absolute difference between two angles, accounting for the wrap at 360°.
+ * @param {number} a The first angle in degrees.
+ * @param {number} b The second angle in degrees.
+ * @returns {number} The separation in `[0, 180]`.
+ */
+export function angularDistance(a, b) {
+  const delta = Math.abs(normaliseDegrees(a) - normaliseDegrees(b));
+  return delta > 180 ? 360 - delta : delta;
+}
+
+/**
  * Is the given slot one of the four cardinal directions?
  * @param {DirectionKey} slot The slot to test.
  * @returns {boolean} True for `n`, `e`, `s` or `w`.

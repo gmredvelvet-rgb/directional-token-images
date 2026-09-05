@@ -7,7 +7,8 @@
  *     hooks and the public API.
  *  2. `setup` — the Token Configuration sheet classes are patched. This has to wait until systems
  *     have registered their own token sheet subclasses, which they do during their `init`.
- *  3. `ready` — the settings cache is re-read and the module announces itself.
+ *  3. `ready` — the settings cache is re-read, the optional self-visibility patch is installed and
+ *     the module announces itself.
  *
  * @module directional-token-images
  */
@@ -21,6 +22,7 @@ import LicenseClient from "./license/license.js";
 import { Logger } from "./lib/logger.js";
 import { Settings, registerSettings } from "./settings/settings.js";
 import { TokenConfigTab } from "./apps/token-config-tab.js";
+import { VisionFacing } from "./lib/vision-facing.js";
 import { registerHooks } from "./hooks/index.js";
 
 /**
@@ -83,6 +85,8 @@ Hooks.once("setup", () => {
 
 Hooks.once("ready", async () => {
   Settings.refresh();
+  // Installs nothing while the padding setting is zero, which is the default.
+  VisionFacing.syncSelfRadius();
   Logger.info(`Ready. API available at game.modules.get("${MODULE_ID}").api`);
   Hooks.callAll(HOOK_EVENTS.READY, DirectionalTokenImagesAPI);
   await startLicenceCheck();

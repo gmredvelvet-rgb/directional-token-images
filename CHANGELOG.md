@@ -4,6 +4,55 @@ All notable changes to this module are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] — 2026-09-05
+
+### Added — directional vision
+
+- **Vision cone follows the artwork**, a world setting (off by default) that aims a token's vision
+  and light cones along the direction its current drawing is facing. A `190°` cone therefore keeps
+  its blind wedge *behind* the character instead of pinned to South, which is where Foundry leaves
+  it because nothing in core ever writes `TokenDocument#rotation` on its own.
+  - Only tokens whose vision angle — or light angle — is narrower than `360°` are ever written to.
+  - The direction used is the centre of the sector the current artwork slot represents, so the cone
+    and the drawing can never disagree. Single-image mode carries no direction and is skipped.
+  - **Isometric maps are handled properly.** The facing is converted back to scene space through
+    whichever `DirectionProvider` is active, so the "South" drawing on a 2:1 isometric map aims the
+    cone South-East in scene coordinates — straight down the screen, where the character is looking.
+    Providers gained a `untransformAngle()` hook for this, the exact inverse of `transformDelta()`,
+    with a working default so existing third-party providers keep working untouched.
+  - Every rotation is written together with `lockRotation`, Foundry's own "turn the facing, leave
+    the drawing upright" switch, so the module's no-rotation promise is unchanged.
+  - The rotation rides inside the update that already carries the artwork change: a move is still
+    exactly one database write.
+  - A rotation the same update is already carrying — a user turning a token by hand, another module
+    steering it — always wins; the module never fights it.
+  - Turning the setting on re-aims every token already placed on the scene in one batched update,
+    performed by the GM's client only. Turning it off leaves the rotations where they are rather
+    than snapping every cone back to South.
+- A per-token **Vision cone follows the artwork** dropdown on the *Directional Images* tab —
+  *Follow world setting* / *Always* / *Never* — so one scout can be steered in a world that leaves
+  the feature off, and one turret can be pinned in a world that has it on.
+- **Self-visibility circle**, a world setting (*Off* by default) that widens the circle a steered
+  token always sees around itself. Core unions such a circle into every limited cone and sizes it
+  from the token's *grid footprint* — right for a top-down token drawn inside its square, far too
+  small for isometric artwork stretched to well over a grid unit tall, where a character walking
+  towards the camera ended up with their own head and shoulders inside their own blind spot.
+  - **Auto** measures the token's own drawn mesh, so it fits the sprite however a projection module
+    has sized it, on any projection, without knowing anything about the module that produced it.
+    **Auto ×1.5 / ×2 / ×3** add margin to that measurement, and are usually what an isometric map
+    wants: the circle lives in *scene* space while the projection compresses scene space vertically
+    on the way to the screen, so an exact fit still clips the top of the drawing. Fixed sizes from
+    `1` to `8` grid squares are offered for a GM who would rather pin it.
+  - Only the `externalRadius` *reported to the vision and light sources* is widened, never
+    `Token#externalRadius` itself — core measures light radius from the token's outer edge by adding
+    `externalRadius` to the configured distance, so widening the getter would have quietly handed
+    every torch-bearing token a bigger torch. Light radius, occlusion and everything else keep
+    reading the real value.
+  - Walls still block normally, and the cone itself is not changed by a single degree. At the
+    default of *Off* nothing is patched at all.
+- `api.VisionFacing`, `api.VISION_FACING` and a `visionFacing` option on
+  `api.setDirectionalImages()`.
+
 ## [1.0.0] — 2026-07-31
 
 ### Added

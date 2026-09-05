@@ -26,10 +26,11 @@ movement workflow and the sheet/HUD applications.
 6. [Token HUD](#token-hud)
 7. [API](#api)
 8. [Hooks](#hooks)
-9. [Isometric and custom projections](#isometric-and-custom-projections)
-10. [System compatibility](#system-compatibility)
-11. [Performance notes](#performance-notes)
-12. [Folder structure](#folder-structure)
+9. [Directional vision](#directional-vision)
+10. [Isometric and custom projections](#isometric-and-custom-projections)
+11. [System compatibility](#system-compatibility)
+12. [Performance notes](#performance-notes)
+13. [Folder structure](#folder-structure)
 
 ---
 
@@ -222,6 +223,8 @@ in the current mode.
 | Transition speed | 250 ms | **Never** affects how fast the token moves. |
 | Preload textures | on | Warms the texture cache when a scene loads. |
 | Show HUD button | on | Adds the compass control to the Token HUD. |
+| Vision cone follows the artwork | off | Aims the token's vision and light cones along the direction it is facing. See [directional vision](#directional-vision). |
+| Self-visibility circle | Off | How much a steered token always sees around itself. **Auto ×1.5** measures the drawn artwork and adds margin — the usual answer on an isometric map. |
 | Debug mode | off | Verbose console logging. |
 
 ### How direction sensitivity behaves
@@ -316,6 +319,70 @@ Hooks.on("directional-token-images.directionChanged", (document, slot, src, mirr
 
 ---
 
+## Directional vision
+
+A token with a limited vision angle — say `190°` — has a blind wedge behind it. Foundry aims that
+wedge with the token's `rotation` field, and nothing in core ever changes that value on its own, so
+by default the wedge stays pinned to South however the artwork turns: a character walking West is
+drawn facing West while still *seeing* South, and the unseen area ends up painted across the front
+of the token instead of behind it.
+
+Switch **Vision cone follows the artwork** on and the cone turns with the drawing. The module
+already knows which way a token is facing — it is the slot whose image the token is wearing — so the
+facing is simply mapped back into a rotation.
+
+| | |
+| --- | --- |
+| **When it applies** | Only to tokens whose vision angle, or light angle, is narrower than `360°`. A token that sees all round is never written to. |
+| **Which direction** | The centre of the sector the current artwork slot represents. Two-image mode can therefore only point North or South, and single-image mode carries no direction at all, so it is skipped. |
+| **Isometric maps** | Fully supported. The facing is converted back through whichever direction provider is active, so the "South" drawing on a 2:1 isometric map aims the cone South-**East** in scene coordinates — which is straight down the screen, where the character is looking. |
+| **The artwork** | Still never rotates. Every rotation is written together with `lockRotation`, which is Foundry's own switch for "turn the facing, leave the drawing upright". |
+| **Cost** | None. The rotation rides inside the same update that already carries the artwork change, so a move is still exactly one database write. |
+| **Overrides** | The **Vision cone follows the artwork** dropdown on each token's *Directional Images* tab can force the behaviour on or off for that token, whichever way the world setting is set. |
+
+Turning the world setting on re-aims every token already on the scene, in a single batched update.
+Turning it off leaves the rotations where they are — a token keeps looking wherever it was last
+walking, rather than every cone on the map snapping back to South at once.
+
+### Tall artwork and the self-visibility circle
+
+Aiming the cone correctly is only half of the isometric problem. Core unions a small circle into
+every limited cone — its own way of saying "a token is never blind to the space it occupies" — and
+sizes it from the token's **grid footprint**: `Math.min(width, height) / 2`, so half a square for a
+Medium creature. That is right for top-down art drawn inside its square.
+
+Isometric art is not drawn inside its square. Projection modules stretch the sprite to well over a
+grid unit tall and centre it on the token's cell, so a character walking *towards the camera* has
+their own head and shoulders outside the cone, where the unseen overlay paints straight over them.
+The token turns correctly and still disappears into the dark.
+
+**Self-visibility circle** widens that circle for the tokens this module steers:
+
+| Value | Meaning |
+| --- | --- |
+| **Off** (default) | Nothing is patched. Core's behaviour, unchanged. |
+| **Auto — fit the artwork** | The circle is measured from the token's own drawn mesh, so it covers exactly the sprite however a projection module has sized it. |
+| **Auto ×1.5 / ×2 / ×3** | The same measurement with room to spare. Usually what you want on an isometric map — see below. |
+| `1` … `8` grid squares | A fixed size, for a GM who would rather pin it. |
+
+A bare fit is often just barely too tight. The vision circle is a circle in *scene* space, but the
+projection compresses scene space vertically on the way to the screen, so a circle that exactly
+encloses the sprite's scene-space box still lands a little inside the top of the drawing — the
+character's head clips the edge. Rather than trying to invert an arbitrary projection matrix (every
+projection module has its own, and users can define custom ones), the fit is simply offered with
+margin. **Auto ×1.5** is the usual answer; go up if the artwork is unusually tall or offset.
+
+Walls still block normally, and the cone itself is not changed by a single degree — the token is
+simply no longer standing in its own blind spot.
+
+Only the `externalRadius` **reported to the vision and light sources** is widened, never
+`Token#externalRadius` itself. The distinction matters: core measures a token's light radius from
+its outer edge with `getLightRadius()`, which adds `externalRadius` to the configured distance, so
+widening the getter would quietly hand every torch-bearing token a bigger torch. Light *radius*,
+occlusion and everything else keep reading the real value.
+
+---
+
 ## Isometric and custom projections
 
 The module never assumes a top-down map. Direction calculation is a replaceable strategy: a
@@ -338,6 +405,15 @@ Hooks.once("directional-token-images.ready", api => {
       // `super` applies the user's Facing offset setting; call it to stay consistent.
       const { dx, dy } = super.transformDelta(vector, context);
       return { dx, dy: dy * 1.1547 };  // undo the flat-top hex vertical squash
+    }
+
+    /**
+     * The inverse, in angles. Only needed for "Vision cone follows the artwork", which has to turn
+     * a facing back into a scene-space rotation. Skip it and the cone falls back to the base
+     * behaviour, which is right for any projection that only rotates.
+     */
+    untransformAngle(degrees, context) {
+      return super.untransformAngle(degrees, context);
     }
   }
 
@@ -453,6 +529,7 @@ directional-token-images/
     │   ├── prototype-sync.js          # propagate an actor's setup to placed tokens
     │   ├── image-cache.js             # memoisation and preloading
     │   ├── texture-swapper.js         # the three ways artwork is applied
+    │   ├── vision-facing.js           # aims the vision/light cone at the artwork
     │   ├── art-renderer.js            # optional offsets and base sprite
     │   └── logger.js
     └── settings/

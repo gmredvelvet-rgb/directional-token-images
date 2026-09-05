@@ -8,10 +8,19 @@
  * @module directional-token-images/settings/settings
  */
 
-import { I18N, MODULE_ID, SETTINGS } from "../constants.js";
+import {
+  I18N,
+  MODULE_ID,
+  SELF_RADIUS,
+  SELF_RADIUS_AUTO_STEPS,
+  SELF_RADIUS_STEPS,
+  SETTINGS,
+  localize
+} from "../constants.js";
 import { MODE_IDS, MODES } from "../lib/directions.js";
 import { DirectionProviderRegistry } from "../lib/direction-provider.js";
 import { Logger } from "../lib/logger.js";
+import { VisionFacing } from "../lib/vision-facing.js";
 
 /**
  * The resolved module configuration.
@@ -40,6 +49,28 @@ export function getModeChoices() {
     choices[id] = MODES[id].labelKey;
     return choices;
   }, {});
+}
+
+/**
+ * Build the `{value: label}` choices for the self-visibility dropdown.
+ *
+ * The fixed sizes are labelled through a single parameterised key rather than one key per step, so
+ * adding a step never needs a translation.
+ *
+ * @returns {Record<string, string>} Localisable choices.
+ */
+export function getSelfRadiusChoices() {
+  const choices = {
+    [SELF_RADIUS.OFF]: `${I18N}.SELF_RADIUS.off`,
+    [SELF_RADIUS.AUTO]: `${I18N}.SELF_RADIUS.auto`
+  };
+  for (const factor of SELF_RADIUS_AUTO_STEPS) {
+    choices[`${SELF_RADIUS.AUTO}${factor}`] = localize(`${I18N}.SELF_RADIUS.autoScaled`, { factor });
+  }
+  for (const step of SELF_RADIUS_STEPS) {
+    choices[`${SELF_RADIUS.FIXED}${step}`] = localize(`${I18N}.SELF_RADIUS.squares`, { squares: step });
+  }
+  return choices;
 }
 
 /**
@@ -90,6 +121,8 @@ export class Settings {
     transitionSpeed: 250,
     preloadTextures: true,
     showHudButton: true,
+    visionFollowsFacing: false,
+    visionSelfRadius: "off",
     debug: false
   };
 
@@ -147,6 +180,10 @@ export class Settings {
     Settings.#cache[key] = value;
     if (key === SETTINGS.DEBUG) Logger.debug = value;
     if (key === SETTINGS.PROVIDER) DirectionProviderRegistry.setActive(value);
+    if (key === SETTINGS.VISION_SELF_RADIUS) VisionFacing.syncSelfRadius();
+    // Bring the scene into line straight away: a toggle nobody can see act is a toggle that looks
+    // broken. Only the GM's client writes, and only when the feature was just switched on.
+    if (key === SETTINGS.VISION_FACING && value === true) void VisionFacing.realignScene();
   }
 }
 
@@ -223,6 +260,14 @@ export function registerSettings() {
 
   register(SETTINGS.PRELOAD, { type: Boolean, default: true });
   register(SETTINGS.SHOW_HUD_BUTTON, { type: Boolean, default: true });
+
+  register(SETTINGS.VISION_FACING, { type: Boolean, default: false });
+
+  register(SETTINGS.VISION_SELF_RADIUS, {
+    type: String,
+    choices: getSelfRadiusChoices(),
+    default: SELF_RADIUS.OFF
+  });
   register(SETTINGS.DEBUG, { type: Boolean, default: false });
 
   Settings.refresh();

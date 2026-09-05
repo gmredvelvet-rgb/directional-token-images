@@ -43,6 +43,16 @@
         <p class="hint">{{localize "DTI.FIELDS.mirrorHorizontal.hint"}}</p>
     </div>
 
+    <div class="form-group dti-vision-facing">
+        <label for="{{dti.vision.name}}">{{localize "DTI.FIELDS.visionFacing.label"}}</label>
+        <div class="form-fields">
+            <select id="{{dti.vision.name}}" name="{{dti.vision.name}}">
+                {{selectOptions dti.vision.choices selected=dti.vision.value localize=true}}
+            </select>
+        </div>
+        <p class="hint">{{localize "DTI.FIELDS.visionFacing.hint"}}</p>
+    </div>
+
     <div class="form-group dti-load-method">
         <label>{{localize "DTI.FIELDS.loadMethod.label"}}</label>
         <div class="form-fields dti-segmented">

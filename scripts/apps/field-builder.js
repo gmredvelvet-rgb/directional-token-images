@@ -8,7 +8,7 @@
  * @module directional-token-images/apps/field-builder
  */
 
-import { I18N, MODULE_ID, VIDEO_EXTENSIONS } from "../constants.js";
+import { I18N, MODULE_ID, VIDEO_EXTENSIONS, VISION_FACING } from "../constants.js";
 import { ALL_SLOTS, DEFAULT_SLOT, MODES, MODE_IDS, MODE_INHERIT } from "../lib/directions.js";
 import { DirectionalTokenData } from "../lib/token-images.js";
 import { getModeChoices } from "../settings/settings.js";
@@ -203,6 +203,15 @@ export function buildFieldContext(data, { compact = false, previewSlot } = {}) {
         // Only meaningful where left and right are distinct directions.
         modes: "4 8",
         hidden: ![4, 8].includes(mode)
+      },
+      vision: {
+        name: `${FIELD_PREFIX}visionFacing`,
+        value: data.visionFacing ?? VISION_FACING.INHERIT,
+        choices: {
+          [VISION_FACING.INHERIT]: `${I18N}.FIELDS.visionFacing.inherit`,
+          [VISION_FACING.ON]: `${I18N}.FIELDS.visionFacing.on`,
+          [VISION_FACING.OFF]: `${I18N}.FIELDS.visionFacing.off`
+        }
       },
       previewSlot: activeSlot,
       previewSrc: previewArtwork?.src ?? "",

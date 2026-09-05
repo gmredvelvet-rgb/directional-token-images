@@ -10,7 +10,7 @@
  */
 
 import { I18N } from "../constants.js";
-import { quantise, rotateVector } from "./directions.js";
+import { normaliseDegrees, quantise, rotateVector, slotToAngle } from "./directions.js";
 import { Logger } from "./logger.js";
 
 /**
@@ -95,6 +95,34 @@ export class DirectionProvider {
     if (!vector || (!vector.dx && !vector.dy)) return null;
     return quantise(vector, context.mode, { sensitivity: context.sensitivity });
   }
+
+  /**
+   * Convert a facing-space angle back into scene space: the exact inverse of
+   * {@link DirectionProvider#transformDelta}.
+   *
+   * Artwork slots are authored in facing space, but everything Foundry itself steers — a vision
+   * cone, a light cone — lives in scene space. Any subclass that overrides `transformDelta` must
+   * override this too, or a token's cone will not agree with the drawing it is wearing.
+   *
+   * @param {number} degrees           A facing-space angle, where 0 is East and angles increase
+   *   clockwise.
+   * @param {DirectionContext} context The full direction context.
+   * @returns {number} The equivalent scene-space angle in `[0, 360)`.
+   */
+  untransformAngle(degrees, context) {
+    return normaliseDegrees(degrees - (context?.angleOffset ?? 0));
+  }
+
+  /**
+   * The scene-space angle a token wearing a given direction slot is facing.
+   * @param {import("./directions.js").DirectionKey} slot The direction slot.
+   * @param {DirectionContext} context                    The full direction context.
+   * @returns {number|null} The angle in `[0, 360)`, or `null` when the slot carries no direction.
+   */
+  sceneAngleForSlot(slot, context) {
+    const angle = slotToAngle(slot);
+    return angle === null ? null : this.untransformAngle(angle, context);
+  }
 }
 
 /**
@@ -129,6 +157,11 @@ export class IsometricDirectionProvider extends DirectionProvider {
   /** @inheritdoc */
   transformDelta(vector, context) {
     return rotateVector(super.transformDelta(vector, context), this.constructor.ROTATION);
+  }
+
+  /** @inheritdoc */
+  untransformAngle(degrees, context) {
+    return super.untransformAngle(normaliseDegrees(degrees - this.constructor.ROTATION), context);
   }
 }
 
