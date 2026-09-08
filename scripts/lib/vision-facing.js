@@ -79,11 +79,32 @@ export class VisionFacing {
    * it would write to the database for no visible result. This is the check that honours the
    * "only when the vision range is not 360°" part of the feature.
    *
+   * It deliberately defers to core's own `Token#hasLimitedSourceAngle` whenever the placeable
+   * exists, because that is the *exact* condition core uses to decide whether a rotation change is
+   * worth re-initialising vision and light sources for:
+   *
+   * ```js
+   * const perspectiveChanged = positionChanged || elevationChanged || sizeChanged
+   *   || (rotationChanged && this.hasLimitedSourceAngle);
+   * ```
+   *
+   * Testing anything wider than core does would mean writing a rotation that core then ignores — a
+   * database write, and a `lockRotation` the token never needed, for no visible result. The
+   * document-only fallback below covers prototype tokens and documents that have no placeable yet.
+   *
    * @param {TokenDocument|PrototypeToken} document The document to inspect.
    * @returns {boolean} True when a limited vision or light cone is configured.
    */
   static hasLimitedCone(document) {
     if (!document) return false;
+
+    try {
+      const placeable = document.object;
+      if (placeable && "hasLimitedSourceAngle" in placeable) return placeable.hasLimitedSourceAngle === true;
+    } catch (error) {
+      Logger.trace("Could not read Token#hasLimitedSourceAngle; falling back to the document.", error);
+    }
+
     const sight = document.sight;
     if (sight?.enabled && VisionFacing.#isLimited(sight.angle)) return true;
     return VisionFacing.#isLimited(document.light?.angle);

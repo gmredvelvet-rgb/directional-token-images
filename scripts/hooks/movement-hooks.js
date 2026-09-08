@@ -109,16 +109,23 @@ export function onPreUpdateToken(document, changes, options, userId) {
  * @returns {Promise<void>} Resolves once any deferred swap has been applied.
  */
 export async function onUpdateToken(document, changes, options, userId) {
-  if (MODULE_ID in (changes.flags ?? {})) {
+  const flagsChanged = MODULE_ID in (changes.flags ?? {});
+  if (flagsChanged) {
     ImageCache.invalidate(document);
     if (Settings.current.preloadTextures) void ImageCache.preload(document);
+  }
 
-    // Saving the configuration must show a result straight away. Only the user who made the change
-    // performs the follow-up update, and it carries no flag changes, so this cannot recurse. An
-    // explicit artwork change in the same update is honoured instead of being overwritten.
-    if (userId === game.user.id && changes.texture?.src === undefined) {
-      await applyRestingArtwork(document);
-    }
+  // Giving a token a limited vision or light angle is the moment its facing starts to matter, and
+  // until now that only took effect the next time somebody moved it — a GM who set an angle of 190
+  // and saw nothing turn had no way to tell the feature apart from a broken one. `sight` and
+  // `light` are the two sub-documents core derives `hasLimitedSourceAngle` from.
+  const perceptionChanged = "sight" in changes || "light" in changes;
+
+  // Saving the configuration must show a result straight away. Only the user who made the change
+  // performs the follow-up update, and it carries neither flags nor sight/light, so this cannot
+  // recurse. An explicit artwork change in the same update is honoured instead of being overwritten.
+  if ((flagsChanged || perceptionChanged) && userId === game.user.id && changes.texture?.src === undefined) {
+    await applyRestingArtwork(document);
   }
 
   // Keep the "currently displayed slot" cache in sync with externally driven texture changes.

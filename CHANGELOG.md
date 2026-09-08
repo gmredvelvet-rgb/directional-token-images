@@ -4,6 +4,30 @@ All notable changes to this module are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Giving a token a limited vision or light angle did nothing until somebody next moved it, so a GM
+  who set an angle of 190° and watched nothing turn had no way to tell the feature apart from a
+  broken one. `updateToken` now re-aims the token as soon as its `sight` or `light` changes.
+
+### Changed
+
+- The "is this cone worth steering?" test now defers to core's own `Token#hasLimitedSourceAngle`
+  whenever the placeable exists, instead of running a parallel check. That is the exact condition
+  core uses to decide whether a rotation change is worth re-initialising sources for:
+
+  ```js
+  const perspectiveChanged = positionChanged || elevationChanged || sizeChanged
+    || (rotationChanged && this.hasLimitedSourceAngle);
+  ```
+
+  The old check was looser — it accepted a limited *light* angle on a token emitting no light at all
+  (`dim` and `bright` both zero), which wrote a rotation and a `lockRotation` that core then ignored:
+  a database write and a permanently locked token for no visible result. The document-only check
+  remains as the fallback for prototype tokens and documents with no placeable yet.
+
 ## [1.1.0] — 2026-09-05
 
 ### Added — directional vision
