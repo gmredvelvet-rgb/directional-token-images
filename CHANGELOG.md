@@ -4,6 +4,13 @@ All notable changes to this module are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.2.0
+
+- **Requires Velvet License Hub.** One Patreon connection now licenses every GM RedVelvet
+  module, in every world. Foundry installs the hub together with this module.
+- Patrons who already activated this module keep their licence: it stays valid until they
+  connect the hub once.
+
 ## [Unreleased]
 
 ### Fixed

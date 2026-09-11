@@ -2,7 +2,7 @@
   "id": "directional-token-images",
   "title": "Directional Token Images",
   "description": "<p>Automatically swaps a Token's artwork based on the direction it is moving. Supports 1, 2, 4 and 8 directional image sets, works with any game system, never rotates, mirrors or flips the token, and is fully pluggable for isometric or custom projections.</p>",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "compatibility": {
     "minimum": "13",
     "verified": "13.351",
@@ -36,7 +36,16 @@
   ],
   "packs": [],
   "relationships": {
-    "requires": [],
+    "requires": [
+      {
+        "id": "velvet-license-hub",
+        "type": "module",
+        "manifest": "https://github.com/gmredvelvet-rgb/velvet-license-hub/releases/latest/download/module.json",
+        "compatibility": {
+          "minimum": "2.0.0"
+        }
+      }
+    ],
     "recommends": []
   },
   "socket": false,
