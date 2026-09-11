@@ -19,6 +19,7 @@ import { ActorSheetButton } from "./apps/actor-sheet-button.js";
 import { DirectionProviderRegistry } from "./lib/direction-provider.js";
 import { DirectionalTokenImagesAPI } from "./api/api.js";
 import LicenseClient from "./license/license.js";
+import { hubActive, licenseHub } from "./license/license-hub.js";
 import { Logger } from "./lib/logger.js";
 import { Settings, registerSettings } from "./settings/settings.js";
 import { TokenConfigTab } from "./apps/token-config-tab.js";
@@ -52,7 +53,8 @@ function registerLicenseSettings() {
     default: false
   });
 
-  game.settings.registerMenu(MODULE_ID, "licenseMenu", {
+  // With the hub active, its menu is the one place to manage the licence.
+  if (!hubActive()) game.settings.registerMenu(MODULE_ID, "licenseMenu", {
     name: `${I18N}.Settings.License.Name`,
     label: `${I18N}.Settings.License.Label`,
     hint: `${I18N}.Settings.License.Hint`,
@@ -105,6 +107,10 @@ async function startLicenceCheck() {
   // Foundry loads modules on the join, setup and stream pages too, where there is no world to
   // licence and nobody to prompt.
   if (game.view !== "game") return;
+  // With the hub active the licence is the hub's: register and stay silent —
+  // no server call, no card, no reminder of this module's own.
+  const hub = licenseHub();
+  if (hub) return void hub.register(MODULE_ID);
   try {
     if (game.user?.isGM) {
       const client = LicenseClient.instance;
@@ -127,6 +133,7 @@ async function startLicenceCheck() {
 // reloading; the flag arrives as a world-setting update.
 Hooks.on("updateSetting", setting => {
   if (setting.key !== `${MODULE_ID}.worldLicensed`) return;
+  if (licenseHub()) return;
   if (isWorldLicensed()) LicenseUI.stopReminder();
   else LicenseUI.startReminder();
 });
